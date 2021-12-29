@@ -37,8 +37,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-  <children>
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="OD.FxmlController">
+    <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #1d3557;" VBox.vgrow="ALWAYS">
          <children>
             <Label layoutX="188.0" layoutY="31.0" prefHeight="35.0" prefWidth="135.0" text="Paswordless" textFill="#457b9d">
@@ -46,7 +46,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="323.0" layoutY="31.0" text="Authentiction" textFill="#f1faee">
+            <Label layoutX="323.0" layoutY="31.0" text="Authentication" textFill="#f1faee">
                <font>
                   <Font size="24.0" />
                </font>
@@ -63,5 +63,6 @@
             </Label>
          </children>
     </AnchorPane>
-  </children>
+    </children>
 </VBox>
+

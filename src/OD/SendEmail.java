@@ -34,8 +34,8 @@ public class SendEmail {
         }
         String kod = sb.toString();
         String host="smtp.gamil.com";
-        final String user="kkretkowski454@gmail.com";//change accordingly
-        final String password="MjDe1234";//change accordingly
+        final String user="ania.studia18@gmail.com";//"kkretkowski454@gmail.com";//change accordingly
+        final String password="ix2zC&F?";//change accordingly
         final String port = "587";
 
         Properties properties = new Properties();

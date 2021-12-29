@@ -4,19 +4,25 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class FxmlController {
+public class FxmlController { // implements Initializable
     private Captcha captcha = new Captcha();
     private nl.captcha.Captcha captcha1 = captcha.GenerateCaptcha();
     private String email = "";
@@ -24,6 +30,9 @@ public class FxmlController {
     private boolean isEmailCorrect = false;
     private boolean isCaptchaCorrect = false;
     private boolean isCodeCorrect = false;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private TextField emailField;
@@ -49,14 +58,17 @@ public class FxmlController {
             Image captchaImage = SwingFXUtils.toFXImage(captcha1.getImage(), null);
             captchaImageView.setImage(captchaImage);
             errorText.setText("Prawidłowy adres e-mail. Możesz teraz wypełnić pole captchy.");
+            errorText.setFill(Color.WHITE);
         } else {
             errorText.setText("Nieprawidłowy adres e-mail.");
+            errorText.setFill(Color.RED);
             return;
         }
     }
 
     @FXML
     void sendEmail(ActionEvent event) {
+        //errorText.setText(" ");
         if(isEmailCorrect){
             String captcha = captchaField.getText();
             isCaptchaCorrect = Captcha.CaptchaTest(captcha, captcha1);
@@ -65,34 +77,46 @@ public class FxmlController {
                 code = se.SendEmail(email);
                 System.out.println("Captcha poprawnie. Kod został wysałny na twój adres e-mail. "+code);
                 errorText.setText("Captcha wypełniona poprawnie. Kod został wysłany na podany adres e-mail.");
+                errorText.setFill(Color.WHITE);
             } else {
                 errorText.setText("Nieprawidłowo przepisany ciąg z captchy.");
+                errorText.setFill(Color.RED);
                 return;
             }
         } else {
             errorText.setText("Nieprawidłowy adres e-mail.");
+            errorText.setFill(Color.RED);
             return;
         }
     }
 
     @FXML
-    void loginButton(ActionEvent event) {
+    void loginButton(ActionEvent event) throws IOException {
         String usersCode = codeField.getText();
         isCodeCorrect = SendEmail.EmailTest(code, usersCode);
         if(isEmailCorrect & isCaptchaCorrect){
             if(isCodeCorrect){
                 System.out.println("Brawo. Udało Ci się zalogować.");
-                errorText.setText("Brawo udało Ci się!");
-            } else {
+                errorText.setText("Zalogowałeś się!"); // Brawo udało Ci się!
+                errorText.setFill(Color.WHITE);
+                FXMLLoader fxmlLoader = new FXMLLoader(NewMain.class.getResource("resources/od-fxml2.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 641, 401);
+                Stage stage = (Stage) anchorPane.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+                } else {
                 errorText.setText("Nieprawidłowy kod.");
+                errorText.setFill(Color.RED);
                 return;
             }
         } else {
             if(isEmailCorrect){
                 errorText.setText("Nieprawidłowo przepisany ciąg z captchy.");
+                errorText.setFill(Color.RED);
                 return;
             } else {
                 errorText.setText("Nieprawidłowy adres e-mail.");
+                errorText.setFill(Color.RED);
                 return;
             }
         }
