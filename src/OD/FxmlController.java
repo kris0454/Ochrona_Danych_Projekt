@@ -30,6 +30,8 @@ public class FxmlController { // implements Initializable
     private boolean isEmailCorrect = false;
     private boolean isCaptchaCorrect = false;
     private boolean isCodeCorrect = false;
+    private long startTime = 0;
+    private long endTime = 0;
 
     @FXML
     private AnchorPane anchorPane;
@@ -71,12 +73,14 @@ public class FxmlController { // implements Initializable
         //errorText.setText(" ");
         if(isEmailCorrect){
             String captcha = captchaField.getText();
+            System.out.println(captcha1);
             isCaptchaCorrect = Captcha.CaptchaTest(captcha, captcha1);
             if(isCaptchaCorrect){
                 SendEmail se = new SendEmail();
                 code = se.SendEmail(email);
                 System.out.println("Captcha poprawnie. Kod został wysałny na twój adres e-mail. "+code);
                 errorText.setText("Captcha wypełniona poprawnie. Kod został wysłany na podany adres e-mail.");
+                startTime = System.currentTimeMillis();
                 errorText.setFill(Color.WHITE);
             } else {
                 errorText.setText("Nieprawidłowo przepisany ciąg z captchy.");
@@ -92,12 +96,16 @@ public class FxmlController { // implements Initializable
 
     @FXML
     void loginButton(ActionEvent event) throws IOException {
+        endTime = System.currentTimeMillis();
         String usersCode = codeField.getText();
         isCodeCorrect = SendEmail.EmailTest(code, usersCode);
         if(isEmailCorrect & isCaptchaCorrect){
+
+            if(endTime - startTime < 300000){//limit czasu
             if(isCodeCorrect){
                 System.out.println("Brawo. Udało Ci się zalogować.");
                 errorText.setText("Zalogowałeś się!"); // Brawo udało Ci się!
+                System.out.println("Czas: "+((endTime - startTime)/60000));
                 errorText.setFill(Color.WHITE);
                 FXMLLoader fxmlLoader = new FXMLLoader(NewMain.class.getResource("resources/od-fxml2.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 641, 401);
@@ -108,6 +116,10 @@ public class FxmlController { // implements Initializable
                 errorText.setText("Nieprawidłowy kod.");
                 errorText.setFill(Color.RED);
                 return;
+            }}else{
+                errorText.setText("Przekroczono czas wykorzystania kodu.");
+                errorText.setFill(Color.RED);
+                System.out.println("Czas: "+((endTime - startTime)/60000));
             }
         } else {
             if(isEmailCorrect){
