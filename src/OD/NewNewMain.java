@@ -1,6 +1,6 @@
 package OD;
 
-public class NewNewMain {
+public class NewNewMain {//punkt startowy projektu
     public static void main(String[] args) {
         NewMain.main(args);
     }
